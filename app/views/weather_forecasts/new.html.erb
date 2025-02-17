@@ -1,0 +1,27 @@
+<h1>Check Weather Forecast</h1>
+
+<%= form_with(url: weather_forecasts_path, local: true) do |f| %>
+  <div class="field">
+    <%= f.label :zipcode, "Enter ZIP Code:" %>
+    <%= f.text_field :zipcode, required: true, pattern: "\\d{5}" %>
+  </div>
+
+  <%= f.submit "Get Weather" %>
+<% end %>
+
+<% if flash[:error] %>
+  <div class="error">
+    <%= flash[:error] %>
+  </div>
+<% end %>
+
+<% if @weather_data %>
+  <h1>Weather for <%= @weather_data['name'] %></h1>
+
+  <div class="weather-info">
+    <p>Temperature: <%= @weather_data['main']['temp'] %>°F</p>
+    <p>Conditions: <%= @weather_data['weather'][0]['main'] %></p>
+  </div>
+
+  <%= link_to "Check Another Location", new_weather_forecast_path %>
+<% end %>

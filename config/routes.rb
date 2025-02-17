@@ -10,5 +10,6 @@ Rails.application.routes.draw do
   # get "service-worker" => "rails/pwa#service_worker", as: :pwa_service_worker
 
   # Defines the root path route ("/")
-  # root "posts#index"
+  resources :weather_forecasts, only: [ :new, :create ]
+  root to: redirect("weather_forecasts/new")
 end
