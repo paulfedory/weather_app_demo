@@ -7,8 +7,8 @@ class OpenWeatherMapService
   Response = Struct.new(:success?, :name, :current_temp, :low_temp, :high_temp, :conditions, :from_cache?)
 
   def initialize
-    # fetch OpenWeatherMap API key from Rails credentials
-    @api_key = Rails.application.credentials.open_weather_map[:api_key]
+    # fetch OpenWeatherMap API key from environment
+    @api_key = ENV["OPEN_WEATHER_MAP_API_KEY"]
   end
 
   def fetch_weather(zipcode:)

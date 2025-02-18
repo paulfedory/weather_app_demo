@@ -4,18 +4,14 @@ Fetches Weather from the [OpenWeatherMap API](https://openweathermap.org/).
 
 To start, obtain an API key from OpenWeatherMap by signing up. (it's free, but rate-limited)
 
-Make sure you edit the rails credentials to include your [OpenWeatherMap API](https://openweathermap.org/) key.
+Store the API key in an environment variable called `OPEN_WEATHER_MAP_API_KEY` and run the rails server with that env variable set.
+
+For example:
 
 ```
-rails credentials:edit
+OPEN_WEATHER_MAP_API_KEY=<YOUR_KEY_HERE> rails server
 ```
 
-Then add your key to the credentials file:
-
-```
-open_weather_map:
-  api_key: YOUR_KEY_HERE
-```
 
 There are 2 important classes here:
 
