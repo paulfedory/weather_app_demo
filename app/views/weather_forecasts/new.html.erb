@@ -1,30 +1,30 @@
-<h1>Check Weather Forecast</h1>
+<main>
+  <h1>Check Weather Forecast</h1>
 
-<%= form_with(url: weather_forecasts_path, local: true) do |f| %>
-  <div class="field">
-    <%= f.label :zipcode, "Enter ZIP Code:" %>
-    <%= f.text_field :zipcode, required: true, pattern: "\\d{5}" %>
-  </div>
+  <%= form_with(url: weather_forecasts_path, local: true) do |f| %>
+    <div class="field">
+      <%= f.label :zipcode, "Enter ZIP Code:" %>
+      <%= f.text_field :zipcode, required: true, pattern: "\\d{5}" %>
+    </div>
 
-  <%= f.submit "Get Weather" %>
-<% end %>
+    <%= f.submit "Get Weather" %>
+  <% end %>
 
-<% if flash[:error] %>
-  <div class="error">
-    <%= flash[:error] %>
-  </div>
-<% end %>
+  <% if flash[:error] %>
+    <div class="error">
+      <%= flash[:error] %>
+    </div>
+  <% end %>
 
-<% if @weather_data %>
-  <h1>Weather for <%= @weather_data.name %></h1>
-
-  <div class="weather-info">
-    <p>Temperature: <%= @weather_data.current_temp %>°F</p>
-    <p>Low: <%= @weather_data.low_temp %>°F</p>
-    <p>High: <%= @weather_data.high_temp %>°F</p>
-    <p>Conditions: <%= @weather_data.conditions %></p>
-    <p>From Cache: <%= @weather_data.from_cache? %></p>
-  </div>
-
-  <%= link_to "Check Another Location", new_weather_forecast_path %>
-<% end %>
+  <% if @weather_data %>
+    <div class="weather-info">
+      <h3>Weather for <%= @weather_data.name %></h3>
+      <p>Temperature: <%= @weather_data.current_temp %>°F</p>
+      <p>Low: <%= @weather_data.low_temp %>°F</p>
+      <p>High: <%= @weather_data.high_temp %>°F</p>
+      <p>Conditions: <%= @weather_data.conditions %></p>
+      <p>From Cache: <%= @weather_data.from_cache? %></p>
+      <%= link_to "Check Another Location", new_weather_forecast_path %>
+    </div>
+  <% end %>
+</main>

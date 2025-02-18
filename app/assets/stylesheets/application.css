@@ -8,3 +8,42 @@
  *
  * Consider organizing styles into separate files for maintainability.
  */
+
+body {
+  font-family: -apple-system, system-ui, BlinkMacSystemFont, "Segoe UI", Roboto, Ubuntu;
+}
+
+main {
+  margin: 0 auto;
+  max-width: 800px;
+  padding: 1rem;
+}
+
+input[type="submit"] {
+  margin-top: 1rem;
+  padding: 0.5rem;
+  font-size: 1rem;
+  border: 1px solid #ccc;
+  border-radius: 0.25rem;
+}
+
+.weather-info {
+  display: flex;
+  flex-direction: column;
+  margin-top: 1rem;
+  padding: 1rem;
+  border: 1px solid #ccc;
+  border-radius: 0.25rem;
+
+  h3 {
+    margin-top: 0;
+  }
+
+  p {
+    margin: 0.2rem 0;
+  }
+
+  a {
+    margin-top: 1rem;
+  }
+}
