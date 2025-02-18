@@ -1,9 +1,10 @@
 require "test_helper"
 
 class OpenWeatherMapServiceTest < ActiveSupport::TestCase
+  WeatherResponse = Struct.new(:success?, :name, :current_temp, :low_temp, :high_temp, :conditions, :from_cache?)
+
   setup do
     @service = OpenWeatherMapService.new
-    @zipcode = "12345"
   end
 
   test "returns successful response with parsed data when API call succeeds" do
@@ -23,29 +24,35 @@ class OpenWeatherMapServiceTest < ActiveSupport::TestCase
       "cod" => 200
     }
 
-    success_response = Struct.new(:body) do
-      def is_a?(klass)
-        klass == Net::HTTPSuccess
-      end
-    end.new(body.to_json)
+    # Create a class to mock a typical response from Net::HTTP.get_response
+    success_response = Class.new do
+      define_method(:body) { body.to_json }
+      define_method(:is_a?) { |klass| klass == Net::HTTPSuccess }
+    end.new
 
     Net::HTTP.stub :get_response, success_response do
-      response = @service.fetch_weather(zipcode: @zipcode)
+      Rails.cache.stub :fetch, success_response do  # Add cache stubbing
+        response = @service.fetch_weather(zipcode: "12345")
 
-      assert response.success?
-      assert_equal(body["main"]["temp"], response.current_temp)
+        assert response.success?
+        assert_equal(body["name"], response.name)
+        assert_equal(body["main"]["temp"], response.current_temp)
+        assert_equal(body["main"]["temp_min"], response.low_temp)
+        assert_equal(body["main"]["temp_max"], response.high_temp)
+        assert_equal(body["weather"][0]["main"], response.conditions)
+      end
     end
   end
 
   test "returns failed response with nil data when API call fails" do
-    error_response = Struct.new(:body) do
-      def is_a?(klass)
-        klass == Net::HTTPError
-      end
-    end.new("")
+    # Create a class to mock an error response from Net::HTTP.get_response
+    error_response = Class.new do
+      define_method(:body) { "" }
+      define_method(:is_a?) { |klass| klass == Net::HTTPError }
+    end.new
 
     Net::HTTP.stub :get_response, error_response do
-      response = @service.fetch_weather(zipcode: @zipcode)
+      response = @service.fetch_weather(zipcode: "23456")
 
       assert_not response.success?
       assert_nil response.name
@@ -53,12 +60,13 @@ class OpenWeatherMapServiceTest < ActiveSupport::TestCase
       assert_nil response.low_temp
       assert_nil response.high_temp
       assert_nil response.conditions
+      assert_not response.from_cache?
     end
   end
 
   test "returns failed response with nil data when exception occurs" do
     Net::HTTP.stub :get_response, ->(*args) { raise StandardError } do
-      response = @service.fetch_weather(zipcode: @zipcode)
+      response = @service.fetch_weather(zipcode: "34567")
 
       assert_not response.success?
       assert_nil response.name
@@ -66,6 +74,7 @@ class OpenWeatherMapServiceTest < ActiveSupport::TestCase
       assert_nil response.low_temp
       assert_nil response.high_temp
       assert_nil response.conditions
+      assert_not response.from_cache?
     end
   end
 end

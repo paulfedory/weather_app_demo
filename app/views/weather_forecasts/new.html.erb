@@ -23,6 +23,7 @@
     <p>Low: <%= @weather_data.low_temp %>°F</p>
     <p>High: <%= @weather_data.high_temp %>°F</p>
     <p>Conditions: <%= @weather_data.conditions %></p>
+    <p>From Cache: <%= @weather_data.from_cache? %></p>
   </div>
 
   <%= link_to "Check Another Location", new_weather_forecast_path %>

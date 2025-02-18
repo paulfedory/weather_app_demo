@@ -1,7 +1,7 @@
 require "test_helper"
 
 class WeatherForecastsControllerTest < ActionDispatch::IntegrationTest
-  WeatherResponse = Struct.new(:success?, :name, :current_temp, :low_temp, :high_temp, :conditions)
+  WeatherResponse = Struct.new(:success?, :name, :current_temp, :low_temp, :high_temp, :conditions, :from_cache?)
 
   setup do
     @zipcode = "12345"
@@ -13,7 +13,7 @@ class WeatherForecastsControllerTest < ActionDispatch::IntegrationTest
   end
 
   test "should handle successful weather fetch" do
-    success_response = WeatherResponse.new(true, "Beverly Hills", 50, 40, 60, "Clear")
+    success_response = WeatherResponse.new(true, "Beverly Hills", 50, 40, 60, "Clear", false)
 
     service_mock = Minitest::Mock.new
     service_mock.expect(:fetch_weather, success_response, zipcode: @zipcode)
@@ -29,7 +29,7 @@ class WeatherForecastsControllerTest < ActionDispatch::IntegrationTest
   end
 
   test "should handle failed weather fetch" do
-    failed_response = WeatherResponse.new(false, nil, nil, nil, nil, nil)
+    failed_response = WeatherResponse.new(false, nil, nil, nil, nil, nil, false)
 
     service_mock = Minitest::Mock.new
     service_mock.expect(:fetch_weather, failed_response, zipcode: @zipcode)
