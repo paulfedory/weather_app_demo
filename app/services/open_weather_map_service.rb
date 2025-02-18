@@ -8,7 +8,7 @@ class OpenWeatherMapService
 
   def initialize
     # fetch OpenWeatherMap API key from Rails credentials
-    @api_key = Rails.application.credentials.openweathermap[:api_key]
+    @api_key = Rails.application.credentials.open_weather_map[:api_key]
   end
 
   def fetch_weather(zipcode:)
