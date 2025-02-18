@@ -16,11 +16,13 @@
 <% end %>
 
 <% if @weather_data %>
-  <h1>Weather for <%= @weather_data['name'] %></h1>
+  <h1>Weather for <%= @weather_data.name %></h1>
 
   <div class="weather-info">
-    <p>Temperature: <%= @weather_data['main']['temp'] %>°F</p>
-    <p>Conditions: <%= @weather_data['weather'][0]['main'] %></p>
+    <p>Temperature: <%= @weather_data.current_temp %>°F</p>
+    <p>Low: <%= @weather_data.low_temp %>°F</p>
+    <p>High: <%= @weather_data.high_temp %>°F</p>
+    <p>Conditions: <%= @weather_data.conditions %></p>
   </div>
 
   <%= link_to "Check Another Location", new_weather_forecast_path %>
